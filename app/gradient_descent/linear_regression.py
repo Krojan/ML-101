@@ -47,7 +47,11 @@ class linear_regression:
         return self.w, self.b, J_history, P_history
 
     def predict(self, X, Y_target):
+        y_predictions = []
         m = X.shape[0]
         for i in range(m):
             y = self.compute_y(X[i])
             print(f"prediction: {y:0.2f}, target value: {Y_target[i]}")
+            y_predictions.append(y)
+
+        return y_predictions

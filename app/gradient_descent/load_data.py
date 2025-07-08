@@ -20,7 +20,7 @@ def load_linear_data(feature="single"):
     w = np.zeros(X_train[0].shape[0])
     b = 0
     lamda = 0.07
-    return X_train, y_train, w, b, lamda, alpha, iters
+    return X_train, y_train, w, b, lamda, alpha, iters, X_train, y_train
 
 
 def load_regularization_data():
@@ -62,7 +62,7 @@ def load_logistic_data(filename):
     # initial_w = np.array([0.2, -0.5])
     # initial_b = -24.0
 
-    return X, y, initial_w, initial_b, lamda, alpha, iterations
+    return X, y, initial_w, initial_b, lamda, alpha, iterations, X, y
 
 
 def load_salary_data(filename):
@@ -77,4 +77,15 @@ def load_salary_data(filename):
     b = 0.09
     alpha = 0.005
     iters = 100000
-    return X, y, X_train, y_train, X_test, y_test, w, b, alpha, iters
+    return (
+        X,
+        y,
+        X_train,
+        y_train,
+        w,
+        b,
+        alpha,
+        iters,
+        X_test,
+        y_test,
+    )
