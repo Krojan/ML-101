@@ -14,8 +14,7 @@ class linear_regression:
         self.b = b_init
 
     def compute_y(self, x):
-        z = np.clip(np.dot(x, self.w) + self.b, -500, 500)
-        return z
+        return np.dot(self.w, x) + self.b
 
     def compute_cost(self):
         cost = 0
