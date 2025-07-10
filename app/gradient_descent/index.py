@@ -12,14 +12,16 @@ def run_linear_regression_multiple_features():
     feature = "multiple"
     X_train, y_train, w, b, _, alpha, iters, X_test, y_test = load_linear_data(feature)
     linear_reg = linear_regression(X=X_train, y=y_train, w_init=w, b_init=b)
-    _, _, J_history, P_history = linear_reg.train(alpha=alpha, num_iterations=iters)
+    w_final, b_final, J_history, P_history = linear_reg.train(
+        alpha=alpha, num_iterations=iters
+    )
     y_test_predictions = linear_reg.predict(X_train, y_train)
     plt.plot_cost_vs_iteration(J_history)
     run_benchmark(
         X_train=X_train,
         y_train=y_train,
-        w_predicted=w,
-        b_predicted=b,
+        w_predicted=w_final,
+        b_predicted=b_final,
         X_test=X_test,
         y_test=y_test,
         y_pred_custom=y_test_predictions,
@@ -43,8 +45,8 @@ def run_linear_regression_single_feature():
     run_benchmark(
         X_train=X_train,
         y_train=y_train,
-        w_predicted=w,
-        b_predicted=b,
+        w_predicted=w_final,
+        b_predicted=b_final,
         X_test=X_test,
         y_test=y_test,
         y_pred_custom=y_test_predictions,
@@ -80,8 +82,49 @@ def run_linear_regression_on_salary_prediction():
     run_benchmark(
         X_train=X_train,
         y_train=y_train,
-        w_predicted=w,
-        b_predicted=b,
+        w_predicted=w_final,
+        b_predicted=b_final,
+        X_test=X_test,
+        y_test=y_test,
+        y_pred_custom=y_test_predictions,
+    )
+
+
+def run_linear_regression_on_gpa_prediction():
+    # predict gpa based on sat score
+    relative_filepath = "../../sample/Files/sat_gpa_score.csv"
+    filepath = os.path.join(current_dir, relative_filepath)
+    filepath = os.path.abspath(filepath)
+    (
+        X,
+        Y,
+        X_train,
+        y_train,
+        w,
+        b,
+        alpha,
+        iters,
+        X_test,
+        y_test,
+    ) = load_gpa_data(filepath)
+
+    linear_reg = linear_regression(X=X_train, y=y_train, w_init=w, b_init=b)
+
+    w_final, b_final, J_history, P_history = linear_reg.train(
+        alpha=alpha, num_iterations=iters
+    )
+
+    y_test_predictions = linear_reg.predict(X_test, y_test)
+    plt.plot_cost_vs_iteration(J_history)
+    plt.plot_cost_vs_w(P_history, J_history)
+    plt.plot_cost_vs_b(P_history, J_history)
+    plt.plot_linear_regression(X, Y, w_final, b_final)
+
+    run_benchmark(
+        X_train=X_train,
+        y_train=y_train,
+        w_predicted=w_final,
+        b_predicted=b_final,
         X_test=X_test,
         y_test=y_test,
         y_pred_custom=y_test_predictions,
@@ -100,6 +143,10 @@ def run_logistic_regression():
 
     logistic_reg.train(alpha=alpha, num_iterations=iters)
     _ = logistic_reg.predict(X_train, y_train)
+
+
+def run_logistic_regression_on_placement_data():
+    pass
 
 
 def run_regularization():
@@ -128,6 +175,8 @@ def main(choice):
         run_logistic_regression()
     elif choice == "regular":
         run_regularization()
+    elif choice == "gpa":
+        run_linear_regression_on_gpa_prediction()
     else:
         print("Invalid choice")
 

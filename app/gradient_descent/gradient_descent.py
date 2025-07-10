@@ -41,7 +41,6 @@ def compute_gradient_with_regularization(self, lamda):
 def run(self, regularizaton, lamda, alpha=0.01, num_iterations=1000):
     J_history = []
     P_history = []
-    w = np.zeros(self.n)
     for i in range(num_iterations):
         if regularizaton:
             dj_dw, dj_db = compute_gradient_with_regularization(self, lamda)
@@ -60,9 +59,13 @@ def run(self, regularizaton, lamda, alpha=0.01, num_iterations=1000):
         )
         # J_history.append(regularizaton ? self.compute_cost() : self.compute_cost_with_regularization(lamda))
         J_history.append(cost)
-        P_history.append([self.w, self.b])
+        P_history.append([self.w.copy(), self.b])
 
         if i % math.ceil(num_iterations / 10) == 0:
-            print(f"Iteration {i:4d}: Cost {J_history[-1]:8.2f}   ")
+            print(
+                f"Iteration {i:4d}: Cost {J_history[-1]:8.2f} W:{self.w} b:{self.b}   "
+            )
+
     print(f"\nOptimal value of (w,b)= {self.w}, {self.b:8.4f}")
+
     return self.w, self.b, J_history, P_history

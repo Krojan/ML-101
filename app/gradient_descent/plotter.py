@@ -4,7 +4,6 @@ import numpy as np
 
 def plot_cost_vs_w(P_history, J_history):
     w_history = [p[0] for p in P_history]
-
     plt.plot(w_history, J_history, marker="*", linestyle="-")
 
     # Labels and title
@@ -71,4 +70,22 @@ def plot_linear_regression(X, Y, w, b):
     plt.title("Linear Regression Fit")
     plt.legend()
     plt.grid(True)
+    plt.show()
+
+
+def plot_data(X, y, title, color, xlabel="X", ylabel="Y"):
+    plt.scatter(X, y, color=color, label=title)
+    # plt.scatter
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.legend()
+    plt.show()
+
+
+def plot_multiple_datasets(datasets):
+    for dataset in datasets:
+        plt.scatter(
+            dataset["X"], dataset["y"], color=dataset["color"], label=dataset["title"]
+        )
+    plt.legend()
     plt.show()

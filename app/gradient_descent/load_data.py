@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from plotter import plot_data, plot_multiple_datasets
 
 # Step 4 : train test split
 from sklearn.model_selection import train_test_split
@@ -77,6 +78,39 @@ def load_salary_data(filename):
     b = 0.09
     alpha = 0.005
     iters = 100000
+    return (
+        X,
+        y,
+        X_train,
+        y_train,
+        w,
+        b,
+        alpha,
+        iters,
+        X_test,
+        y_test,
+    )
+
+
+def load_gpa_data(filename):
+    data = pd.read_csv(filename)
+    print("Importing from csv, columnns= ", data.columns)
+    X_unnormalized = np.array(data["SAT"])
+    y = np.array(data["GPA"])
+    # plot_data(X_unnormalized, y, color="red", title="SAT vs GPA unnormalized data")
+
+    X_normalized = (X_unnormalized - np.mean(X_unnormalized)) / np.std(X_unnormalized)
+    plot_data(X_normalized, y, color="blue", title="SAT vs GPA normalized data")
+
+    X = np.array(X_normalized).reshape(-1, 1)
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=2500
+    )
+    w = np.zeros(X_train[0].shape[0])
+    b = 0
+    alpha = 0.001
+    iters = 10000
     return (
         X,
         y,

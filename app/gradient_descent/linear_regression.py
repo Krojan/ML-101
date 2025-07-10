@@ -14,12 +14,14 @@ class linear_regression:
         self.b = b_init
 
     def compute_y(self, x):
-        return np.dot(self.w, x) + self.b
+        z = np.clip(np.dot(x, self.w) + self.b, -500, 500)
+        return z
 
     def compute_cost(self):
         cost = 0
         for i in range(self.m):
             f_wb = self.compute_y(self.X[i])
+
             diff = f_wb - self.y[i]
             err = diff**2
             cost += err
@@ -37,14 +39,14 @@ class linear_regression:
         return mean_sq_cost + regularization_cost
 
     def train(self, alpha, num_iterations, regularization=False, lamda=0.7):
-        w, b, J_history, P_history = gradient_descent.run(
+        optimal_w, optimal_b, J_history, P_history = gradient_descent.run(
             self,
             alpha=alpha,
             num_iterations=num_iterations,
             regularizaton=regularization,
             lamda=lamda,
         )
-        return self.w, self.b, J_history, P_history
+        return optimal_w, optimal_b, J_history, P_history
 
     def predict(self, X, Y_target):
         y_predictions = []

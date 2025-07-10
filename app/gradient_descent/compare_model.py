@@ -35,7 +35,7 @@ def compute_performance(y_test, y_pred_custom, y_pred_standard):
 
 def visualize_comparisions(X_test, y_test, y_pred_custom, y_pred_standard):
     plt.scatter(X_test, y_test, color="black", label="True values")
-    plt.plot(X_test, y_pred_custom, color="red", label="Custom model")
-    plt.plot(X_test, y_pred_standard, color="blue", label="Sklearn model")
+    plt.plot(X_test, y_pred_custom, color="red", label="Custom model", marker="o")
+    plt.plot(X_test, y_pred_standard, color="blue", label="Sklearn model", marker="x")
     plt.legend()
     plt.show()
