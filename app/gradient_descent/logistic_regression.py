@@ -50,11 +50,19 @@ class logistic_regression:
             regularizaton=regularization,
             lamda=lamda,
         )
-        return self.w, self.b, J_history, P_history
+        return w, b, J_history, P_history
 
-    def predict(self, X, Y_target):
+    def predict(self, X, Y_target, threshold=0.5):
         m = X.shape[0]
+        y_predictions = []
         for i in range(m):
-            y = round(self.compute_y(X[i]))
+            y = self.compute_y(X[i])
+            if y > threshold:
+                y = 1
+            else:
+                y = 0
 
             print(f"prediction: {y:0.2f}, target value: {Y_target[i]}")
+            y_predictions.append(y)
+
+        return y_predictions

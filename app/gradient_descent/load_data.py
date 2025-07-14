@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
-from plotter import plot_data, plot_multiple_datasets
+from plotter import plot_data, plot_placement_data
+from sklearn.preprocessing import StandardScaler
+
 
 # Step 4 : train test split
 from sklearn.model_selection import train_test_split
@@ -97,7 +99,6 @@ def load_gpa_data(filename):
     print("Importing from csv, columnns= ", data.columns)
     X_unnormalized = np.array(data["SAT"])
     y = np.array(data["GPA"])
-    # plot_data(X_unnormalized, y, color="red", title="SAT vs GPA unnormalized data")
 
     X_normalized = (X_unnormalized - np.mean(X_unnormalized)) / np.std(X_unnormalized)
     plot_data(X_normalized, y, color="blue", title="SAT vs GPA normalized data")
@@ -111,6 +112,45 @@ def load_gpa_data(filename):
     b = 0
     alpha = 0.001
     iters = 10000
+    return (
+        X,
+        y,
+        X_train,
+        y_train,
+        w,
+        b,
+        alpha,
+        iters,
+        X_test,
+        y_test,
+    )
+
+
+def load_placement_data(filename):
+    data = pd.read_csv(filename)
+    print("Importing from csv, columnns= ", data.columns)
+    X = np.array(data[["cgpa", "placement_exam_marks"]])
+    y = np.array(data["placed"])
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+    print("Performing data transformation ...")
+    scaled_dict = {
+        "cgpa": X_scaled[:, 0],
+        "placement_exam_marks": X_scaled[:, 1],
+        "placed": y,
+    }
+    plot_placement_data(scaled_dict)
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X_scaled, y, test_size=0.2, random_state=2211
+    )
+    alpha = 0.01
+    iters = 1000
+    w = np.zeros(X.shape[1])
+    b = 0
+    print("Number of 1s:", np.sum(y == 1))
+    print("Number of 0s:", np.sum(y == 0))
+
     return (
         X,
         y,

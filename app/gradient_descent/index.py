@@ -141,12 +141,50 @@ def run_logistic_regression():
     # cost = logistic_reg.compute_cost()
     # print(f"logistic reg cost = {cost}")
 
-    logistic_reg.train(alpha=alpha, num_iterations=iters)
+    w, b, J_history, P_history = logistic_reg.train(alpha=alpha, num_iterations=iters)
     _ = logistic_reg.predict(X_train, y_train)
 
 
 def run_logistic_regression_on_placement_data():
-    pass
+    # predict placement based on cgpa and placement score
+    relative_filepath = "../../sample/Files/placement.csv"
+    filepath = os.path.join(current_dir, relative_filepath)
+    filepath = os.path.abspath(filepath)
+    (
+        X,
+        Y,
+        X_train,
+        y_train,
+        w,
+        b,
+        alpha,
+        iters,
+        X_test,
+        y_test,
+    ) = load_placement_data(filepath)
+
+    logistic_reg = logistic_regression(X=X_train, y=y_train, w_init=w, b_init=b)
+
+    w_final, b_final, J_history, P_history = logistic_reg.train(
+        alpha=alpha, num_iterations=iters
+    )
+
+    y_test_predictions = logistic_reg.predict(X_test, y_test)
+    plt.plot_cost_vs_iteration(J_history, after_iteration=int(0.9 * iters))
+    plt.plot_cost_vs_w(P_history, J_history)
+    plt.plot_cost_vs_b(P_history, J_history)
+    plt.plot_decision_boundary(X, Y, w_final, b_final)
+
+    run_benchmark(
+        X_train=X_train,
+        y_train=y_train,
+        w_predicted=w_final,
+        b_predicted=b_final,
+        X_test=X_test,
+        y_test=y_test,
+        y_pred_custom=y_test_predictions,
+        linear=False,
+    )
 
 
 def run_regularization():
@@ -177,6 +215,8 @@ def main(choice):
         run_regularization()
     elif choice == "gpa":
         run_linear_regression_on_gpa_prediction()
+    elif choice == "placement":
+        run_logistic_regression_on_placement_data()
     else:
         print("Invalid choice")
 

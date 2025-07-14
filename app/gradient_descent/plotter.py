@@ -4,7 +4,7 @@ import numpy as np
 
 def plot_cost_vs_w(P_history, J_history):
     w_history = [p[0] for p in P_history]
-    plt.plot(w_history, J_history, marker="*", linestyle="-")
+    plt.plot(w_history, J_history, marker="*", linestyle="-", color="red")
 
     # Labels and title
     plt.xlabel("Value of w")
@@ -31,9 +31,10 @@ def plot_cost_vs_b(P_history, J_history):
 
 def plot_cost_vs_iteration(J_history, after_iteration=100):
     fig, (ax1, ax2) = plt.subplots(1, 2, constrained_layout=True, figsize=(12, 4))
-    ax1.plot(J_history[:100])
+    ax1.plot(J_history[:after_iteration])
     ax2.plot(
-        1000 + np.arange(len(J_history[after_iteration:])), J_history[after_iteration:]
+        after_iteration + np.arange(len(J_history[after_iteration:])),
+        J_history[after_iteration:],
     )
     ax1.set_title("Cost vs. iteration(start)")
     ax2.set_title("Cost vs. iteration (end)")
@@ -88,4 +89,84 @@ def plot_multiple_datasets(datasets):
             dataset["X"], dataset["y"], color=dataset["color"], label=dataset["title"]
         )
     plt.legend()
+    plt.show()
+
+
+def plot_placement_data(data):
+    colors = ["red" if status == 0 else "green" for status in data["placed"]]
+    plt.figure(figsize=(8, 6))
+    plt.scatter(data["cgpa"], data["placement_exam_marks"], c=colors, edgecolors="k")
+    plt.xlabel("GPA")
+    plt.ylabel("Placement Mark")
+    plt.title("Placement Status by GPA and Placement Mark")
+    plt.grid(True)
+    plt.legend(
+        handles=[
+            plt.Line2D(
+                [0],
+                [0],
+                marker="o",
+                color="w",
+                label="Not Placed",
+                markerfacecolor="red",
+                markersize=8,
+            ),
+            plt.Line2D(
+                [0],
+                [0],
+                marker="o",
+                color="w",
+                label="Placed",
+                markerfacecolor="green",
+                markersize=8,
+            ),
+        ]
+    )
+    plt.show()
+
+
+def plot_decision_boundary(X, y, w, b, title="Decision Boundary"):
+    colors = ["red" if label == 0 else "green" for label in y]
+
+    plt.figure(figsize=(8, 6))
+    plt.scatter(X[:, 0], X[:, 1], c=colors, edgecolors="k")
+    plt.xlabel("Scaled GPA")
+    plt.ylabel("Scaled Placement Marks")
+    plt.title(title)
+    plt.grid(True)
+
+    # Create decision boundary: where sigmoid(w·x + b) = 0.5 => w·x + b = 0
+    x_vals = np.linspace(np.min(X[:, 0]), np.max(X[:, 0]), 100)
+    if w[1] != 0:
+        y_vals = -(w[0] * x_vals + b) / w[1]
+        plt.plot(x_vals, y_vals, label="Decision Boundary", color="blue")
+    else:
+        # Vertical line if w[1] = 0
+        x_val = -b / w[0]
+        plt.axvline(x=x_val, color="blue", label="Decision Boundary")
+
+    plt.legend(
+        handles=[
+            plt.Line2D(
+                [0],
+                [0],
+                marker="o",
+                color="w",
+                label="Not Placed",
+                markerfacecolor="red",
+                markersize=8,
+            ),
+            plt.Line2D(
+                [0],
+                [0],
+                marker="o",
+                color="w",
+                label="Placed",
+                markerfacecolor="green",
+                markersize=8,
+            ),
+            plt.Line2D([0], [0], color="blue", label="Decision Boundary"),
+        ]
+    )
+
     plt.show()
