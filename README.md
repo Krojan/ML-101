@@ -15,6 +15,8 @@ python3 app/gradient_descent/index.py logistic         # Runs logistic regressio
 python3 app/gradient_descent/index.py linear-single    # Runs linear regression on single feature input
 python3 app/gradient_descent/index.py linear-multiple  # Runs linear regression on multi-feature input
 python3 app/gradient_descent/index.py salary           # Runs linear regression on salary dataset
+python3 app/gradient_descent/index.py gpa              # Runs linear regression on gpa prediction using SAT score
+python3 app/gradient_descent/index.py placement        # Runs logistic regression on placement data
 python3 app/gradient_descent/index.py regular          # Runs both linear and logistic regression with regularization
 ```
 
